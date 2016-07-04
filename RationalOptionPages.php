@@ -440,17 +440,37 @@ class RationalOptionPages {
 				echo '</fieldset>';
 				break;
 			case 'select':
+                                if (!empty($field['attributes']) && isset($field['attributes']['multiple']) && $field['attributes']['multiple']) {
+                                  $field_tag_name = "{$page_key}[{$field['id']}][]";
+                                  $field_name = "{$field['id']}[]";
+                                }
+                                else {
+                                  $field_tag_name = "{$page_key}[{$field['id']}]";
+                                  $field_name = "{$field['id']}";
+                                }
 				printf(
-					'<select %s id="%s" name="%s" title="%s">',
+					'<select %s %s id="%s" name="%s" title="%s">',
 					!empty( $field['class'] ) ? "class='{$field['class']}'" : '',						// class
+                                        !empty( $attributes ) ? implode(' ', $attributes) : '',
 					$field['id'],																		// id
-					"{$page_key}[{$field['id']}]",														// name
+					$field_tag_name,														// name
 					$field['title_attr']																// title
 				);
 				foreach ( $field['choices'] as $value => $text ) {
 					$selected = $value === $field['value'] ? 'selected' : '';
 					if ( isset( $this->options[ $field['id'] ] ) ) {
-						$selected = $value === $this->options[ $field['id'] ] ? 'selected' : '';
+                                                if (!is_array($this->options[ $field['id'] ] ) ) {
+						  $selected = $value === $this->options[ $field['id'] ] ? 'selected="selected"' : '';
+                                                }
+                                                else {
+                                                  $selected = '';
+                                                  foreach ($this->options[ $field['id'] ] as $option) {
+                                                    if ($value === $option) {
+                                                      $selected = 'selected="selected"';
+                                                      continue;
+                                                    }
+                                                  }
+                                                }
 					}
 					printf(
 						'<option %s value="%s">%s</option>',
