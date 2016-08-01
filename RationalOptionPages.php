@@ -381,6 +381,10 @@ class RationalOptionPages {
 				}
 			}
 		}
+		
+		// Sanitize field values
+		$field['value'] = strip_tags($field['value']);		// Removes HTML tags
+		$field['value'] = esc_attr($field['value']);		// Escapes field for HTML attributes
 				
 		switch ( $field['type'] ) {
 			case 'checkbox':
@@ -572,6 +576,9 @@ class RationalOptionPages {
 									$input[ $field['id'] ] = false;
 								}
 								break;
+							default:
+								$input[ $field['id'] ] = strip_tags($input[ $field['id'] ]);
+								$input[ $field['id'] ] = esc_attr($input[ $field['id'] ]);								
 						}
 					}
 				}
