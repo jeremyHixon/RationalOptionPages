@@ -576,6 +576,9 @@ class RationalOptionPages {
 									$input[ $field['id'] ] = false;
 								}
 								break;
+							default:
+								$input[ $field['id'] ] = strip_tags($input[ $field['id'] ]);
+								$input[ $field['id'] ] = esc_attr($input[ $field['id'] ]);								
 						}
 					}
 				}
