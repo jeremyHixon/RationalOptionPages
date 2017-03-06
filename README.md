@@ -151,6 +151,7 @@ Based on [WordPress' `add_settings_field()` function](https://developer.wordpres
 	* Input - `autocomplete, autofocus, disabled, list, max, maxlength, min, pattern, readonly, required, size and step`
 	* Select - `multiple, size`
 	* Textarea - `cols, rows and wrap`
+* `sanitize` - A boolean that indicates whether or not the field's value should be sanitized. Defaults to `false`, and doesn't apply to checkboxes.
 	
 #### Examples
 
