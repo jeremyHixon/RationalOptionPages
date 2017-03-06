@@ -1,4 +1,5 @@
 <?php
+
 /**
  * RationalOptionPages class
  *
@@ -382,10 +383,12 @@ class RationalOptionPages {
 			}
 		}
 		
-		// Sanitize field values
-		$field['value'] = strip_tags($field['value']);		// Removes HTML tags
-		$field['value'] = esc_attr($field['value']);		// Escapes field for HTML attributes
-				
+		// Sanitize field values, unless 'sanitize' was set to false for this field.
+		if ( !isset( $field['sanitize'] ) || $field['sanitize']) {
+			$field['value'] = strip_tags($field['value']);		// Removes HTML tags
+			$field['value'] = esc_attr($field['value']);		// Escapes field for HTML attributes
+		}
+	
 		switch ( $field['type'] ) {
 			case 'checkbox':
 				$checked = $field['checked'] ? 'checked' : '';
@@ -577,8 +580,11 @@ class RationalOptionPages {
 								}
 								break;
 							default:
-								$input[ $field['id'] ] = strip_tags($input[ $field['id'] ]);
-								$input[ $field['id'] ] = esc_attr($input[ $field['id'] ]);								
+								// Sanitize by default; skip if this field's 'sanitize' setting is false.
+								if ( !isset($field['sanitize'])  || $field['sanitize'] ) {
+									$input[ $field['id'] ] = strip_tags($input[ $field['id'] ]);
+									$input[ $field['id'] ] = esc_attr($input[ $field['id'] ]);								
+								}
 						}
 					}
 				}
