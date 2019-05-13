@@ -384,7 +384,7 @@ class RationalOptionPages {
 		}
 		
 		// Sanitize field values, unless 'sanitize' was set to false for this field.
-		if ( !isset( $field['sanitize'] ) || $field['sanitize']) {
+		if ( ( !isset( $field['sanitize'] ) || $field['sanitize'] ) && $field['type'] !== 'wp_editor' ) {
 			$field['value'] = strip_tags($field['value']);		// Removes HTML tags
 			$field['value'] = esc_attr($field['value']);		// Escapes field for HTML attributes
 		}
