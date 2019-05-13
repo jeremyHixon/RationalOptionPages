@@ -571,6 +571,9 @@ class RationalOptionPages {
 		
 		if ( !empty( $page['sections'] ) ) {
 			foreach ( $page['sections'] as $section ) {
+				if ( isset( $field['sanitize'] ) && !$field['sanitize'] ) {
+					continue;
+				}
 				if ( !empty( $section['fields'] ) ) {
 					foreach ( $section['fields'] as $field ) {
 						switch ( $field['type'] ) {
@@ -579,12 +582,12 @@ class RationalOptionPages {
 									$input[ $field['id'] ] = false;
 								}
 								break;
+							case 'wp_editor':
+								$input[ $field['id'] ] = wp_kses_po( $input[ $field['id'] ] );
+								break;
 							default:
 								// Sanitize by default; skip if this field's 'sanitize' setting is false.
-								if ( !isset($field['sanitize'])  || $field['sanitize'] ) {
-									$input[ $field['id'] ] = strip_tags($input[ $field['id'] ]);
-									$input[ $field['id'] ] = esc_attr($input[ $field['id'] ]);								
-								}
+								$input[ $field['id'] ] = sanitize_text_field( $input[ $field['id'] ] );
 						}
 					}
 				}
