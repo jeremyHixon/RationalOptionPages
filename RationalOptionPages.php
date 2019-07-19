@@ -583,7 +583,7 @@ class RationalOptionPages {
 								}
 								break;
 							case 'wp_editor':
-								$input[ $field['id'] ] = wp_kses_po( $input[ $field['id'] ] );
+								$input[ $field['id'] ] = wp_kses_post( $input[ $field['id'] ] );
 								break;
 							default:
 								// Sanitize by default; skip if this field's 'sanitize' setting is false.
