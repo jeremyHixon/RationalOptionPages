@@ -27,6 +27,9 @@ $pages = array(
 );
 $option_page = new RationalOptionPages( $pages );
 ```
+### Note:
+
+If you installed this previously and the class is already being instantiated somewhere else you will get fatal errors. You can avoid this by either renaming the class or by wrapping the `require_once()` in a `if ( !class_exists() )` conditional.
 
 ## Usage
 
