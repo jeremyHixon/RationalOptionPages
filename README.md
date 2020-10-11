@@ -19,7 +19,9 @@ A PHP class for building WordPress Option Pages. Uses multi-dimensional associat
 * Instantiate the class with your array of pages
 
 ```php
-require_once('RationalOptionPages.php');
+if ( !class_exists( 'RationalOptionPages' ) ) {
+	require_once('RationalOptionPages.php');
+}
 $pages = array(
 	'sample-page'	=> array(
 		'page_title'	=> __( 'Sample Page', 'sample-domain' ),
