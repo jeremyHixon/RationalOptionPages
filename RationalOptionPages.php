@@ -571,11 +571,11 @@ class RationalOptionPages {
 		
 		if ( !empty( $page['sections'] ) ) {
 			foreach ( $page['sections'] as $section ) {
-				if ( isset( $field['sanitize'] ) && !$field['sanitize'] ) {
-					continue;
-				}
 				if ( !empty( $section['fields'] ) ) {
 					foreach ( $section['fields'] as $field ) {
+						if ( isset( $field['sanitize'] ) && !$field['sanitize'] ) {
+							continue;
+						}
 						switch ( $field['type'] ) {
 							case 'checkbox':
 								if ( empty( $input[ $field['id'] ] ) ) {
