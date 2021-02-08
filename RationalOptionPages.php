@@ -341,6 +341,7 @@ class RationalOptionPages {
 	protected function build_menu_page( $page_key ) {
 		$page = $this->pages[ $page_key ];
 		$this->options = get_option( $page_key, array() );
+		settings_errors();
 		?><div class="wrap">
 			<h1><?php echo $GLOBALS['title']; ?></h1><?php
 			
