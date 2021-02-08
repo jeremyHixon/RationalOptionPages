@@ -385,8 +385,15 @@ class RationalOptionPages {
 		
 		// Sanitize field values, unless 'sanitize' was set to false for this field.
 		if ( ( !isset( $field['sanitize'] ) || $field['sanitize'] ) && $field['type'] !== 'wp_editor' ) {
-			$field['value'] = strip_tags($field['value']);		// Removes HTML tags
-			$field['value'] = esc_attr($field['value']);		// Escapes field for HTML attributes
+			if (!empty($field['attributes']) && isset($field['attributes']['multiple']) && $field['attributes']['multiple']) {
+				for ( $i = 0; $i < count( $field['value'] ); $i++ ) {
+					$field['value'][ $i ] = strip_tags($field['value'][ $i ]);		// Removes HTML tags
+					$field['value'][ $i ] = esc_attr($field['value'][ $i ]);		// Escapes field for HTML attributes	
+				}
+			} else {
+				$field['value'] = strip_tags($field['value']);		// Removes HTML tags
+				$field['value'] = esc_attr($field['value']);		// Escapes field for HTML attributes	
+			}
 		}
 	
 		switch ( $field['type'] ) {
@@ -447,14 +454,14 @@ class RationalOptionPages {
 				echo '</fieldset>';
 				break;
 			case 'select':
-                                if (!empty($field['attributes']) && isset($field['attributes']['multiple']) && $field['attributes']['multiple']) {
-                                  $field_tag_name = "{$page_key}[{$field['id']}][]";
-                                  $field_name = "{$field['id']}[]";
-                                }
-                                else {
-                                  $field_tag_name = "{$page_key}[{$field['id']}]";
-                                  $field_name = "{$field['id']}";
-                                }
+				if (!empty($field['attributes']) && isset($field['attributes']['multiple']) && $field['attributes']['multiple']) {
+					$field_tag_name = "{$page_key}[{$field['id']}][]";
+					$field_name = "{$field['id']}[]";
+				}
+				else {
+					$field_tag_name = "{$page_key}[{$field['id']}]";
+					$field_name = "{$field['id']}";
+				}
 				printf(
 					'<select %s %s id="%s" name="%s" title="%s">',
 					!empty( $field['class'] ) ? "class='{$field['class']}'" : '',						// class
@@ -466,18 +473,12 @@ class RationalOptionPages {
 				foreach ( $field['choices'] as $value => $text ) {
 					$selected = $value === $field['value'] ? 'selected' : '';
 					if ( isset( $this->options[ $field['id'] ] ) ) {
-                                                if (!is_array($this->options[ $field['id'] ] ) ) {
+            if (!is_array($this->options[ $field['id'] ] ) ) {
 						  $selected = $value === $this->options[ $field['id'] ] ? 'selected="selected"' : '';
-                                                }
-                                                else {
-                                                  $selected = '';
-                                                  foreach ($this->options[ $field['id'] ] as $option) {
-                                                    if ($value === $option) {
-                                                      $selected = 'selected="selected"';
-                                                      continue;
-                                                    }
-                                                  }
-                                                }
+						}
+						else {
+						  $selected = in_array( $value, $this->options[ $field['id'] ] ) ? 'selected="selected"' : '';
+						}
 					}
 					printf(
 						'<option %s value="%s">%s</option>',
