@@ -491,12 +491,14 @@ class RationalOptionPages {
 				break;
 			case 'textarea':
 				printf(
-					'<textarea %s id="%s" name="%s" %s %s title="%s">%s</textarea>%s',
+					'<textarea %s id="%s" name="%s" %s %s %s %s title="%s">%s</textarea>%s',
 					!empty( $field['class'] ) ? "class='{$field['class']}'" : '',						// class
 					$field['id'],																		// id
 					"{$page_key}[{$field['id']}]",														// name
 					!empty( $field['placeholder'] ) ? "placeholder='{$field['placeholder']}'" : '',		// placeholder
 					!empty( $field['rows'] ) ? "rows='{$field['rows']}'" : '',							// rows
+					!empty( $field['cols'] ) ? "cols='{$field['cols']}'" : '', // cols
+					!empty( $field['wrap'] ) ? "wrap='{$field['wrap']}'" : '', // wrap
 					$field['title_attr'],																// title
 					$field['value'],																	// value
 					!empty( $field['text'] ) ? "<p class='help'>{$field['text']}</p>" : ''				// text
