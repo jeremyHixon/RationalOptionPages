@@ -581,6 +581,11 @@ class RationalOptionPages {
 							continue;
 						}
 						switch ( $field['type'] ) {
+							case 'select':
+								if ( !empty($input[$field['id']]) && !empty($input['attributes']['multiple']) ) {
+									$input[ $field['id'] ] = $input[ $field['id'] ];
+								}
+								break;
 							case 'checkbox':
 								if ( empty( $input[ $field['id'] ] ) ) {
 									$input[ $field['id'] ] = false;
