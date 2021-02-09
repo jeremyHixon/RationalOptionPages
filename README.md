@@ -299,6 +299,22 @@ $pages = array(
 							'option-two'	=> __( 'Option Two', 'sample-domain' ),
 						),
 					),
+					'select-multiple'		=> array(
+						'title'			=> __( 'Select multiple', 'sample-domain' ),
+						'type'			=> 'select',
+						'value' => array(
+							'option-two'
+						),
+						'choices' => array(
+							'option-one' => __( 'Option One', 'sample-domain' ),
+							'option-two' => __( 'Option Two', 'sample-domain' ),
+							'option-three' => __( 'Option Three', 'sample-domain' ),
+						),
+						'attributes' => array(
+							'multiple' => 'multiple'
+						),
+						'sanitize' => true
+					),
 					'textarea'		=> array(
 						'title'			=> __( 'Textarea', 'sample-domain' ),
 						'type'			=> 'textarea',
