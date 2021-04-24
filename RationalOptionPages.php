@@ -370,7 +370,7 @@ class RationalOptionPages {
 		$section = $page['sections'][ $section_key ];
 		$field = $section['fields'][ $field_key ];
 		
-		if ( $field['type'] !== 'checkbox' ) {
+		if ( isset( $field['value'] ) && $field['type'] !== 'checkbox' ) {
 			$field['value'] = !empty( $this->options[ $field['id'] ] ) ? $this->options[ $field['id'] ] : $field['value'];
 		}
 		
@@ -507,7 +507,7 @@ class RationalOptionPages {
 				break;
 			case 'wp_editor':
 				$field['textarea_name'] = "{$page_key}[{$field['id']}]";
-				wp_editor( $field['value'], $field['id'], array(
+				wp_editor( isset( $field['value'] ) ? $field['value'] : '', $field['id'], array(
 					'textarea_name'		=> $field['textarea_name'],
 				) );
 				echo !empty( $field['text'] ) ? '<p class="help">'.__($field['text'],'text-domain').'</p>' : '';
