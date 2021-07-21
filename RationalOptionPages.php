@@ -48,6 +48,7 @@ class RationalOptionPages {
 			'callback'				=> false,
 			'icon_url'				=> false,
 			'position'				=> null,
+            'sections_as_tabs'      => false
 		),
 		'add_settings_field'	=> array(
 			'id'					=> 'settings_field',
@@ -239,9 +240,25 @@ class RationalOptionPages {
 				$page_key,
 				$page_params['sanitize']
 			);
-			
-			if ( !empty( $page_params['sections'] ) ) {
-				foreach ( $page_params['sections'] as $section_key => $section_params ) {
+
+			$tab = $this->get_current_tab( $page_params );
+
+			if (!empty( $page_params['sections']) ) {
+			    if ( $page_params['sections_as_tabs'] ){
+                    foreach ($page_params['sections'] as $section){
+                        if ( $section['id'] == $tab ){
+                            $sections[] = $section;
+                        }
+                    }
+			    } else {
+                    $sections = $page_params['sections'];
+                }
+            } else {
+                $sections = false;
+            }
+
+			if ( $sections ) {
+				foreach ( $sections as $section_key => $section_params ) {
 					// Sort and trim the array for the function
 					$sort_order = array_keys( $this->defaults['add_settings_section'] );
 					$params = $this->sort_array( $section_params, $sort_order );
@@ -342,9 +359,17 @@ class RationalOptionPages {
 		$page = $this->pages[ $page_key ];
 		$this->options = get_option( $page_key, array() );
 		settings_errors();
-		?><div class="wrap">
-			<h1><?php _e($GLOBALS['title'],'text-domain'); ?></h1><?php
-			
+        $tab = $this->get_current_tab($page);
+        ?><div class="wrap">
+			<h1><?php _e($GLOBALS['title'],'text-domain'); ?></h1>
+            <?php if($page['sections_as_tabs']) { ?>
+            <nav class="nav-tab-wrapper">
+                <?php foreach ( (array) $page[ 'sections' ] as $section ) { ?>
+                    <a href="?page=<?php echo $page['menu_slug'] ?>&tab=<?php echo $section['id'] ?>" class="nav-tab <?php if($tab===$section['id'] ):?>nav-tab-active<?php endif; ?>"><?php echo $section['title'] ?></a>
+                <?php  } ?>
+            </nav>
+            <?php } ?>
+            <?php
 			if ( !empty( $page['sections'] ) ) {
 				?><form action="options.php" method="post"><?php
 					settings_errors( $page_key );
@@ -873,5 +898,25 @@ class RationalOptionPages {
 		}
 		
 		return $section;
+	}
+
+
+    /**
+     * Gets the current active tab
+     * @param	string	$page_params	Array of page paramters
+     *
+     * @return	string					id of the tab
+     */
+    protected function get_current_tab($page_params){
+        if (!$page_params['sections_as_tabs']){
+            return false;
+        }
+	    if (isset($_GET['tab'])){
+	        return $_GET['tab'];
+        } else if ( count($page_params['sections']) > 0 ) {
+	        return reset($page_params['sections'])['id'];
+        } else {
+	        return false;
+        }
 	}
 }
