@@ -49,6 +49,7 @@ Based on [WordPress' `add_menu_page()` function](https://developer.wordpress.org
 * `menu_slug` - The "slug" of the menu item. Defaults to a "slugified" version of the `page_title`.
 * `icon_url` - The URL of the menu icon. [WordPress' Dashicons are available](https://developer.wordpress.org/resource/dashicons). Defaults to `false`, renders "dashicons-admin-generic".
 * `position` - The position where the menu item appears, from 1 to 99. Defaults to `null`, last.
+* `sections_as_tabs` - Renders the sections as tabs for easier navigation. Defaults to false.
 
 If your page title is more than 2 words I recommend using the `menu_title` parameter to avoid wrapping. The default `capability` should work for most plugins and themes as only the admin would typically make higher level changes like these.
 
