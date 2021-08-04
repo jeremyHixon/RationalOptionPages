@@ -252,7 +252,7 @@ class RationalOptionPages {
 						$params['callback'] = array( $this, $params['callback'] );
 					}
 			
-					call_user_func_array( 'add_settings_section', $params );
+					call_user_func_array( 'add_settings_section', array_values( $params ) );
 					
 					if ( !empty( $section_params['fields'] ) ) {
 						foreach ( $section_params['fields'] as $field_key => $field_params ) {
@@ -279,7 +279,7 @@ class RationalOptionPages {
 								$params['callback'] = array( $this, $params['callback'] );
 							}
 					
-							call_user_func_array( 'add_settings_field', $params );
+							call_user_func_array( 'add_settings_field', array_values( $params ) );
 						}
 					}
 				}
@@ -302,7 +302,8 @@ class RationalOptionPages {
 			// Finalize callback
 			$params['callback'] = array( $this, $params['callback'] );
 			
-			call_user_func_array( $page['function'], $params );
+			
+			_func_array( $page['function'], $params );
 		}
 	}
 	
