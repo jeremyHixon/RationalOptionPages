@@ -303,7 +303,7 @@ class RationalOptionPages {
 			$params['callback'] = array( $this, $params['callback'] );
 			
 			
-			_func_array( $page['function'], $params );
+			call_user_func_array( $page['function'], array_values( $params ) );
 		}
 	}
 	
