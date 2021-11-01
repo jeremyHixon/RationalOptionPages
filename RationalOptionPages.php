@@ -618,7 +618,7 @@ class RationalOptionPages {
 	protected function slugify( $text, $separator = '_' ) {
 		$text = preg_replace( '~[^\\pL\d]+~u', $separator, $text );
 		$text = trim( $text, $separator );
-		$text = iconv( 'utf-8', 'us-ascii//TRANSLIT', $text );
+		$text = iconv( 'utf-8', 'windows-1251//TRANSLIT', $text );
 		$text = strtolower( $text );
 		$text = preg_replace( '~[^-\w]+~', '', $text );
 		if ( empty( $text ) ) {
