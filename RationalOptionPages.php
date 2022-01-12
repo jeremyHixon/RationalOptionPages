@@ -271,7 +271,7 @@ class RationalOptionPages {
 								!in_array( $field_params['type'], array( 'radio' ) ) &&
 								( empty( $field_params['no_label'] ) || $field_params['no_label'] === false )
 							) {
-								$params['title'] = '<label for="{$params["id"]}">'.__($params['title'],'text-domain').'</label>';
+								$params['title'] = "<label for='{$params["id"]}'>".__($params['title'],'text-domain')."</label>";
 							}
 		
 							// Finalize callback
