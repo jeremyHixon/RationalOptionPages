@@ -229,6 +229,13 @@ class RationalOptionPages {
 	 */	
 	public function admin_init() {
 		foreach ( $this->pages as $page_key => $page_params ) {
+			// Ensures that when WP checks if `current_user_can( $capability )`, that
+			// $capability is set to the capability given for the specific page in the
+			// $pages array.
+			add_filter( "option_page_capability_$page_key", function ( $capability ) {
+				return $this->pages[ $GLOBALS['option_page'] ]['capability'];
+			}, 10, 1 );
+			
 			// Finalize sanitize
 			if ( empty( $page_params['custom'] ) && !is_array( $page_params['sanitize'] ) ) {
 				$page_params['sanitize'] = array( $this, $page_params['sanitize'] );
