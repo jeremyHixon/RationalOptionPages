@@ -8,7 +8,7 @@
  * @author		Jeremy Hixon <jeremy@jeremyhixon.com>
  * @copyright	Copyright (c) 2016
  * @link		http://jeremyhixon.com
- * @version		1.0.0
+ * @version		1.0.1
  */
 class RationalOptionPages {
 	/* ==========================================================================
@@ -62,6 +62,7 @@ class RationalOptionPages {
 			'title'					=> 'Settings Section',
 			'callback'				=> false,
 			'page'					=> 'option_page',
+			'args'					=> array(),
 		),
 		'add_submenu_page'		=> array(
 			'parent_slug'			=> 'option_page',
@@ -70,6 +71,7 @@ class RationalOptionPages {
 			'capability'			=> 'manage_options',
 			'menu_slug'				=> 'sub_option_page',
 			'callback'				=> false,
+			'position'				=> null,
 		),
 	);
 	protected $errors;
@@ -253,13 +255,17 @@ class RationalOptionPages {
 					$sort_order = array_keys( $this->defaults['add_settings_section'] );
 					$params = $this->sort_array( $section_params, $sort_order );
 					$params = array_slice( $params, 0, count( $this->defaults['add_settings_section'] ) );
-	
+
 					// Finalize callback
 					if ( empty( $params['custom'] ) && !is_array( $params['callback'] ) ) {
 						$params['callback'] = array( $this, $params['callback'] );
 					}
-			
-					call_user_func_array( 'add_settings_section', array_values( $params ) );
+
+					// Filter out unused params for PHP 8 Compatibility
+					$valid_keys = array_keys( $this->defaults['add_settings_section'] );
+					$valid_params = array_intersect_key( $params, array_flip( $valid_keys ) );
+
+					call_user_func_array( 'add_settings_section', array_values( $valid_params ) );
 					
 					if ( !empty( $section_params['fields'] ) ) {
 						foreach ( $section_params['fields'] as $field_key => $field_params ) {
@@ -267,12 +273,12 @@ class RationalOptionPages {
 							if ( !$this->media_script && $field_params['type'] === 'media' ) {
 								$this->media_script = true;
 							}
-							
+
 							// Sort and trim the array for the function
 							$sort_order = array_keys( $this->defaults['add_settings_field'] );
 							$params = $this->sort_array( $field_params, $sort_order );
 							$params = array_slice( $params, 0, count( $this->defaults['add_settings_field'] ) );
-							
+
 							// Add label wrapper on title
 							if (
 								!in_array( $field_params['type'], array( 'radio' ) ) &&
@@ -280,13 +286,17 @@ class RationalOptionPages {
 							) {
 								$params['title'] = "<label for='{$params["id"]}'>".__($params['title'],'text-domain')."</label>";
 							}
-		
+
 							// Finalize callback
 							if ( empty( $params['custom'] ) && !is_array( $params['callback'] ) ) {
 								$params['callback'] = array( $this, $params['callback'] );
 							}
-					
-							call_user_func_array( 'add_settings_field', array_values( $params ) );
+
+							// Filter out unused params for PHP 8 Compatibility
+							$valid_keys = array_keys( $this->defaults['add_settings_field'] );
+							$valid_params = array_intersect_key( $params, array_flip( $valid_keys ) );
+
+							call_user_func_array( 'add_settings_field', array_values( $valid_params ) );
 						}
 					}
 				}
@@ -305,12 +315,15 @@ class RationalOptionPages {
 			$sort_order = array_keys( $this->defaults[ $page['function'] ] );
 			$params = $this->sort_array( $page, $sort_order );
 			$params = array_slice( $params, 0, count( $this->defaults[ $page['function'] ] ) );
-			
+
 			// Finalize callback
 			$params['callback'] = array( $this, $params['callback'] );
-			
-			
-			call_user_func_array( $page['function'], array_values( $params ) );
+
+			// Filter out unused params for PHP 8 Compatibility
+			$valid_keys = array_keys( $this->defaults[$page['function']] );
+			$valid_params = array_intersect_key( $params, array_flip( $valid_keys ) );
+
+			call_user_func_array( $page['function'], array_values( $valid_params ) );
 		}
 	}
 	
