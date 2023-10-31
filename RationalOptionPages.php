@@ -193,11 +193,12 @@ class RationalOptionPages {
 					$(function() {
 						var mediaUploader,
 							rationalMediaButton = $( '.rational-media-upload' ),
-							rationalMediaAttachment;
+							rationalMediaAttachment,
+							rationalMediaCurrentImput;
 						
 						rationalMediaButton.click( function( e ) {
 							e.preventDefault();
-							var rationalMediaDestination = $( this ).prev( 'input' );
+							rationalMediaCurrentImput = $( this ).prev( 'input' );
 							
 							if ( mediaUploader ) {
 								mediaUploader.open();
@@ -214,7 +215,7 @@ class RationalOptionPages {
 							
 							mediaUploader.on( 'select', function() {
 								rationalMediaAttachment = mediaUploader.state().get('selection').first().toJSON();
-								rationalMediaDestination.val( rationalMediaAttachment.url );
+								rationalMediaCurrentImput.val( rationalMediaAttachment.url );
 							} );
 							
 							mediaUploader.open();
