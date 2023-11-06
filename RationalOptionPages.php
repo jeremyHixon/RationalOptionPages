@@ -394,6 +394,8 @@ class RationalOptionPages {
 		
 		if ( isset( $field['value'] ) && $field['type'] !== 'checkbox' ) {
 			$field['value'] = !empty( $this->options[ $field['id'] ] ) ? $this->options[ $field['id'] ] : $field['value'];
+		} else if ( empty( $field['value'] ) && !empty( $this->options[ $field['id'] ] ) ) {
+			$field['value'] = $this->options[ $field['id'] ];
 		}
 		
 		// Additional attributes
