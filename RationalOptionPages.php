@@ -366,7 +366,7 @@ class RationalOptionPages {
 		settings_errors();
 		?><div class="wrap">
 			<h1><?php _e($GLOBALS['title'],'text-domain'); ?></h1><?php
-			
+
 			if ( !empty( $page['sections'] ) ) {
 				?><form action="options.php" method="post"><?php
 					settings_errors( $page_key );
@@ -620,7 +620,15 @@ class RationalOptionPages {
 								break;
 							default:
 								// Sanitize by default; skip if this field's 'sanitize' setting is false.
-								$input[ $field['id'] ] = sanitize_text_field( $input[ $field['id'] ] );
+								if( isset($field['sanitize_callback']) )
+								{
+									$input[ $field['id'] ] = call_user_func( $field['sanitize_callback'], $input[ $field['id'] ], $field );
+								}
+								else
+								{
+									$input[ $field['id'] ] = sanitize_text_field( $input[ $field['id'] ] );
+
+								}
 						}
 					}
 				}
@@ -720,7 +728,7 @@ class RationalOptionPages {
 		if ( empty( $field['title'] ) ) {
 			$this->submit_error( __('Field parameter "title" is required','text-domain') );
 		}
-		
+
 		// ID
 		if ( empty( $field['id'] ) ) {
 			$field['id'] = $this->slugify( $field['title'] );
@@ -728,7 +736,14 @@ class RationalOptionPages {
 		
 		// Callback
 		$field['callback'] = empty( $field['callback'] ) ? "add_settings_field|{$page_key}|{$section_key}|{$field_key}" : $field['callback'];
-		
+
+		if( isset($field['sanitize_callback']) )
+			{
+				if ( ! is_callable($field['sanitize_callback']) ) {
+					$this->submit_error( __('Field parameter "sanitize_callback" must be callable','text-domain') );
+				}
+			}
+
 		// Page
 		$field['page'] = $page;
 		
