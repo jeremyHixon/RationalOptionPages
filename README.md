@@ -157,7 +157,8 @@ Based on [WordPress' `add_settings_field()` function](https://developer.wordpres
 	* Select - `multiple, size`
 	* Textarea - `cols, rows and wrap`
 * `sanitize` - A boolean that indicates whether or not the field's value should be sanitized. Defaults to `false`, and doesn't apply to checkboxes.
-	
+* `sanitize_callback` - A callable (_function or method_) to validate field content, only for `default` field type.
+
 #### Examples
 
 The most basic of inputs.
@@ -325,12 +326,39 @@ $pages = array(
 						'type'			=> 'wp_editor',
 						'value'			=> 'Pellentesque consectetur volutpat lectus, ac molestie lorem molestie nec. Vestibulum in auctor massa. Vivamus convallis nunc quis lacus maximus, non ultricies risus gravida. Praesent ac diam imperdiet, volutpat nisi sed, semper eros. In nec orci hendrerit, laoreet nunc eu, semper magna. Curabitur eu lorem a enim sodales consequat. Vestibulum eros nunc, congue sed blandit in, maximus eu tellus.',
 					),
+					'countries_list'		=> array(
+						'title'			=> __( 'Some text', 'sample-domain' ),
+						'text'			=> __( 'The content will be checked with a custom function/method.' ),
+						'sanitize_callback' => 'countries_list_validate', // <- the function name
+					),
+
 				),
 			),
 		),
 	),
 );
 $option_page = new RationalOptionPages( $pages );
+
+...
+
+function countries_list_validate(string $input)
+{
+	if (empty($input)) {
+			return $input;
+	}
+	if (! preg_match('/^([A-Za-z]{2}(?:,\s*[A-Za-z]{2})*)$/', $input)) {
+			add_settings_error(
+					self::PAGE_SLUG,
+					'bad_format',
+					__('2-chars country codes separated by comma.', Plugin::TEXTDOMAIN),
+					'error'
+			);
+			$options = get_option(self::PAGE_SLUG, array());
+			return $options[Plugin::OPTION_COUNTRIES] ?? '';
+	}
+	return sanitize_text_field($input);
+}
+
 ```
 
 ## Retrieving Data
